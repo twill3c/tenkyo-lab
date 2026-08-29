@@ -216,6 +216,32 @@ async function main() {
   console.log(`  文字が埋もれている要素: ${lowContrast.length} 件(陽性対照は ${canary.length} 件で捕捉)`);
   if (lowContrast.length) console.log("   ", JSON.stringify(lowContrast.slice(0, 5)));
   await hakaru.screenshot({ path: resolve(ROOT, "data/hakaru.png"), fullPage: true });
+  // --- 静的ページ(索引も模型も取らないことを確かめる) ---
+  const staticPages = [];
+  for (const path of ["/kiita/", "/tsukurikata/"]) {
+    const pg = await ctx.newPage();
+    const reqs = [];
+    pg.on("request", (r) => reqs.push(r.url()));
+    pg.on("console", (m) => {
+      if (m.type() === "error") consoleErrors.push(`[${path}] ${m.text()}`);
+    });
+    pg.on("pageerror", (e) => consoleErrors.push(`[${path}] pageerror: ${e.message}`));
+    const res = await pg.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
+    if (!res || !res.ok()) throw new Error(`${path} が開けない: ${res && res.status()}`);
+    const heading = (await pg.textContent("h1")) ?? "";
+    const tables = (await pg.$$("table")).length;
+    const heavy = reqs.filter((u) => /\/tenkyo\//.test(u));
+    const ext = reqs.filter((u) => !u.startsWith(BASE) && !u.startsWith("data:") && !u.startsWith("blob:"));
+    const dim = await contrastCheck(pg, "button, a, td, th, p, span, h1, h2, h3, li");
+    staticPages.push({ path, heading, tables, heavy: heavy.length, external: ext.length, lowContrast: dim.length });
+    if (dim.length) lowContrast.push(...dim.map((x) => ({ page: path, ...x })));
+    await pg.close();
+  }
+  report.staticPages = staticPages;
+  for (const s of staticPages) {
+    console.log(`  ${s.path} 「${s.heading}」表 ${s.tables} / 配布物への取得 ${s.heavy} 件 / 外部 ${s.external} 件`);
+  }
+
   await hakaru.close();
 
   report.hakaru = {
@@ -273,6 +299,12 @@ async function main() {
   if (report.hakaru.indexRequests !== 0) fatal.push("「測る」が索引・模型を取りに行った");
   if (report.hakaru.external !== 0) fatal.push("「測る」が外部オリジンへ通信した");
   if (report.hakaru.perLawRows < 10) fatal.push(`法令別の行が少なすぎる: ${report.hakaru.perLawRows}`);
+  for (const s of report.staticPages ?? []) {
+    if (s.heavy !== 0) fatal.push(`${s.path} が配布物を取りに行った`);
+    if (s.external !== 0) fatal.push(`${s.path} が外部へ通信した`);
+    if (s.tables < 3) fatal.push(`${s.path} の表が少なすぎる: ${s.tables}`);
+    if (!s.heading) fatal.push(`${s.path} の見出しが空`);
+  }
   if (report.lowContrast.length !== 0) fatal.push(`文字が背景に埋もれている: ${report.lowContrast.length} 件`);
   if (report.contrastCanary !== 1) fatal.push("対比の検査器が陽性対照を捕まえられない — 検査器が壊れている");
   if (topIndexReqs.length !== 0) fatal.push("N-03: トップページが索引を取りに行った");

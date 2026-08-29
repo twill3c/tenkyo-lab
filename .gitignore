@@ -22,3 +22,6 @@ data/keep-extra.json
 next-env.d.ts
 .vercel
 data/hiku.png
+data/chunks-article.json
+data/index-article/
+data/hakaru.png

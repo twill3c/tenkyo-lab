@@ -43,6 +43,24 @@
   },
   "lowContrast": [],
   "contrastCanary": 1,
+  "staticPages": [
+    {
+      "path": "/kiita/",
+      "heading": "効いた・効かなかった",
+      "tables": 7,
+      "heavy": 0,
+      "external": 0,
+      "lowContrast": 0
+    },
+    {
+      "path": "/tsukurikata/",
+      "heading": "作り方",
+      "tables": 5,
+      "heavy": 0,
+      "external": 0,
+      "lowContrast": 0
+    }
+  ],
   "hakaru": {
     "rows": [
       [

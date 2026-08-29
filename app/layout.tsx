@@ -17,6 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/">はじめに</a>
             <a href="/hiku/">引く</a>
             <a href="/hakaru/">測る</a>
+            <a href="/kiita/">効いた・効かなかった</a>
+            <a href="/tsukurikata/">作り方</a>
           </div>
         </nav>
         <main>{children}</main>

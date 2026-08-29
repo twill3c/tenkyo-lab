@@ -33,7 +33,8 @@
     "typecheck": "tsc --noEmit",
     "serve": "node scripts/serve-out.mjs",
     "inspect": "node scripts/inspect-browser.mjs",
-    "pack:eval": "node scripts/pack-eval.mjs"
+    "pack:eval": "node scripts/pack-eval.mjs",
+    "prefix": "node scripts/prefix-experiment.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",

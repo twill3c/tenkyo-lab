@@ -31,14 +31,15 @@ async function main() {
   const outDir = resolve(ROOT, arg("out", "data/index"));
   const limit = Number(arg("limit", Infinity));
 
-  const { chunks } = JSON.parse(fs.readFileSync(resolve(ROOT, "data/chunks.json"), "utf8"));
+  const inFile = arg("in", "data/chunks.json");
+  const { chunks } = JSON.parse(fs.readFileSync(resolve(ROOT, inFile), "utf8"));
   const targets = chunks.slice(0, limit);
   if (targets.length === 0) {
     console.error("チャンクが 1 件も無い");
     process.exit(1);
   }
   fs.mkdirSync(outDir, { recursive: true });
-  console.log(`索引対象 ${targets.length} チャンク / 接頭辞 ${JSON.stringify(prefix)} / 出力 ${outDir}`);
+  console.log(`索引対象 ${targets.length} チャンク(${inFile}) / 接頭辞 ${JSON.stringify(prefix)} / 出力 ${outDir}`);
 
   const ex = await pipeline("feature-extraction", MODEL, { dtype: "q8" });
   const sink = fs.createWriteStream(path.join(outDir, "vec_f32.bin"));

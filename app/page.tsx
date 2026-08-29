@@ -73,6 +73,13 @@ export default function Home() {
         <a href="/hakaru/">測る</a> —— つまみを回すと 2,808 問の指標がその場で動きます。
         こちらは<strong>索引も模型も取りません</strong>(600KB 弱)。
       </p>
+      <p>
+        <a href="/kiita/">効いた・効かなかった</a> —— 通説が壊れた場所、目標に届かなかった線、
+        そして<strong>計器のほうが壊れていた話</strong>。
+      </p>
+      <p>
+        <a href="/tsukurikata/">作り方</a> —— 素材の集め方から配り方まで。数字はすべて実測です。
+      </p>
       <div className="warnbox">
         初回の一問だけ、模型と索引で <strong>およそ 48MB</strong> を取得します(二問目からは数十 KB)。
         実際に取得した量は画面に出ます。すべて閲覧者の端末で動き、外部の API は使いません。

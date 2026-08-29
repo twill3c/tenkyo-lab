@@ -20,7 +20,13 @@ export function chunkId(lawId, articleNum, paragraphNum) {
   return `${lawId}#${articleNum}-${paragraphNum}`;
 }
 
-export function buildChunks(law) {
+/**
+ * 分割の粒度。F-02 で切り替えて比べる。
+ *   paragraph … 条の項ごとに 1 チャンク(既定。中央値 92 字)
+ *   article   … 条ごとに 1 チャンク(項を連ねる。粗いほうが良いという実測 §5.1 の検算用)
+ */
+export function buildChunks(law, granularity = "paragraph") {
+  if (granularity === "article") return buildArticleChunks(law);
   const out = [];
   for (const a of law.articles) {
     if (!a.num) continue;
@@ -45,13 +51,43 @@ export function buildChunks(law) {
   return out;
 }
 
+/** 条ごとに 1 チャンク。項の本文を連ねる。id は項番号を 0 にして項単位と区別する。 */
+export function buildArticleChunks(law) {
+  const out = [];
+  for (const a of law.articles) {
+    if (!a.num) continue;
+    if (a.paragraphs.length === 0) continue;
+    const text = a.paragraphs.map((p) => p.text).join("");
+    out.push({
+      id: chunkId(law.lawId, a.num, "0"),
+      lawId: law.lawId,
+      lawTitle: law.title,
+      articleNum: a.num,
+      articleLabel: articleNumToLabel(a.num),
+      paragraphNum: "0",
+      caption: a.caption,
+      chapter: a.chapter,
+      section: a.section,
+      text,
+      indexText: (a.caption ? `${a.caption}　` : "") + text,
+    });
+  }
+  return out;
+}
+
 async function main() {
+  const arg = (k, d) => {
+    const i = process.argv.indexOf("--" + k);
+    return i < 0 ? d : process.argv[i + 1];
+  };
+  const granularity = arg("granularity", "paragraph");
+  const outFile = arg("out", "data/chunks.json");
   const files = (await readdir(RAW_DIR)).filter((f) => f.endsWith(".json"));
   const chunks = [];
   const laws = [];
   for (const f of files.sort()) {
     const law = parseLaw(JSON.parse(await readFile(resolve(RAW_DIR, f), "utf8")));
-    const c = buildChunks(law);
+    const c = buildChunks(law, granularity);
     chunks.push(...c);
     laws.push({
       lawId: law.lawId,
@@ -75,7 +111,7 @@ async function main() {
       total: lens.reduce((a, b) => a + b, 0),
     },
   };
-  await writeFile(resolve(ROOT, "data/chunks.json"), JSON.stringify({ stats, laws, chunks }), "utf8");
+  await writeFile(resolve(ROOT, outFile), JSON.stringify({ stats: { ...stats, granularity }, laws, chunks }), "utf8");
   console.table(laws);
   console.log(stats);
   // 生成物が空のまま正常終了しない(HC-056)
