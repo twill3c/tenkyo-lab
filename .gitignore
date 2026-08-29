@@ -5,3 +5,7 @@ out/
 __pycache__/
 .venv/
 .vercel/
+data/raw/
+data/chunks.json
+data/oracle.json
+data/*.jsonl

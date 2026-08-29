@@ -1,0 +1,17 @@
+{
+  "name": "tenkyo-lab",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "fetch": "node scripts/fetch-laws.mjs",
+    "chunks": "node scripts/build-chunks.mjs",
+    "oracle": "node scripts/build-oracle.mjs",
+    "review": "node scripts/sample-review.mjs"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}

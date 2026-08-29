@@ -1,0 +1,132 @@
+{
+  "_comment": "手作りの最小法令。実物(e-Gov 法令 API v2 / 著作権法 345AC0000000048, 2026-08-29 取得)の law_full_text と同じタグ構成・属性名を写して作った。実物の構造は data/PROVENANCE.md に記録。",
+  "law_info": { "law_id": "999AC0000000001", "law_num": "架空元年法律第一号" },
+  "revision_info": { "law_title": "見本法" },
+  "law_full_text": {
+    "tag": "Law",
+    "attr": { "Lang": "ja", "LawType": "Act" },
+    "children": [
+      { "tag": "LawNum", "attr": {}, "children": ["架空元年法律第一号"] },
+      {
+        "tag": "LawBody",
+        "attr": {},
+        "children": [
+          { "tag": "LawTitle", "attr": { "Kana": "みほんほう" }, "children": ["見本法"] },
+          {
+            "tag": "MainProvision",
+            "attr": {},
+            "children": [
+              {
+                "tag": "Chapter",
+                "attr": { "Num": "1" },
+                "children": [
+                  { "tag": "ChapterTitle", "attr": {}, "children": ["第一章　総則"] },
+                  {
+                    "tag": "Article",
+                    "attr": { "Num": "1" },
+                    "children": [
+                      { "tag": "ArticleCaption", "attr": {}, "children": ["（目的）"] },
+                      { "tag": "ArticleTitle", "attr": {}, "children": ["第一条"] },
+                      {
+                        "tag": "Paragraph",
+                        "attr": { "Num": "1" },
+                        "children": [
+                          { "tag": "ParagraphNum", "attr": {}, "children": [] },
+                          {
+                            "tag": "ParagraphSentence",
+                            "attr": {},
+                            "children": [
+                              { "tag": "Sentence", "attr": { "Num": "1" }, "children": ["この法律は、見本を定めることを目的とする。"] }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tag": "Article",
+                    "attr": { "Num": "2_3" },
+                    "children": [
+                      { "tag": "ArticleCaption", "attr": {}, "children": ["（準用）"] },
+                      { "tag": "ArticleTitle", "attr": {}, "children": ["第二条の三"] },
+                      {
+                        "tag": "Paragraph",
+                        "attr": { "Num": "1" },
+                        "children": [
+                          { "tag": "ParagraphNum", "attr": {}, "children": [] },
+                          {
+                            "tag": "ParagraphSentence",
+                            "attr": {},
+                            "children": [
+                              { "tag": "Sentence", "attr": { "Num": "1" }, "children": ["第十七条第一項の規定は、前条の場合について準用する。"] }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "tag": "Paragraph",
+                        "attr": { "Num": "2" },
+                        "children": [
+                          { "tag": "ParagraphNum", "attr": {}, "children": ["２"] },
+                          {
+                            "tag": "ParagraphSentence",
+                            "attr": {},
+                            "children": [
+                              { "tag": "Sentence", "attr": { "Num": "1" }, "children": ["前項の規定により準用する場合において、次の各号に掲げる事項は、同条第二項の例による。"] }
+                            ]
+                          },
+                          {
+                            "tag": "Item",
+                            "attr": { "Num": "1" },
+                            "children": [
+                              { "tag": "ItemTitle", "attr": {}, "children": ["一"] },
+                              {
+                                "tag": "ItemSentence",
+                                "attr": {},
+                                "children": [
+                                  { "tag": "Sentence", "attr": { "Num": "1" }, "children": ["第百二十条の二第一号に掲げるもの"] }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tag": "SupplProvision",
+            "attr": { "Extract": "true" },
+            "children": [
+              { "tag": "SupplProvisionLabel", "attr": {}, "children": ["附　則"] },
+              {
+                "tag": "Article",
+                "attr": { "Num": "1" },
+                "children": [
+                  { "tag": "ArticleTitle", "attr": {}, "children": ["第一条"] },
+                  {
+                    "tag": "Paragraph",
+                    "attr": { "Num": "1" },
+                    "children": [
+                      { "tag": "ParagraphNum", "attr": {}, "children": [] },
+                      {
+                        "tag": "ParagraphSentence",
+                        "attr": {},
+                        "children": [
+                          { "tag": "Sentence", "attr": { "Num": "1" }, "children": ["この法律は、第三条の規定の施行の日から施行する。"] }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
