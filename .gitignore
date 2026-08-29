@@ -16,3 +16,5 @@ data/ranks-ts.json
 data/ranks-py.json
 __pycache__/
 .pytest_cache/
+data/model-src/
+data/keep-extra.json

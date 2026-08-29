@@ -57,21 +57,51 @@ describe("N-07 文字種検査", () => {
     expect(bad).toEqual([]);
   });
 
-  it("T-704b ソースに同形異字が混入していない", () => {
+  // 陰性対照として非日本語を**意図的に**置く行がある(刈り込みの範囲外を示すため)。
+  // ファイル単位で除外すると緩すぎるので、**行単位のマーカー**にする。
+  // そして「マーカーが実際に必要な行にだけ付いているか」を対で検査する(AGENTS.md の規範)。
+  const ALLOW = "text-hygiene:allow-foreign";
+
+  function scanSources() {
     const dirs = ["src/lib", "scripts"];
-    const bad = [];
-    let scanned = 0;
+    const files = [];
     for (const d of dirs) {
       if (!existsSync(d)) continue;
-      for (const f of readdirSync(d).filter((x) => x.endsWith(".mjs"))) {
-        scanned += 1;
-        const t = readFileSync(`${d}/${f}`, "utf8");
-        const m = CYRILLIC.exec(t);
-        if (m) bad.push(`${d}/${f}: ${JSON.stringify(m[0])} at ${m.index}`);
-      }
+      for (const f of readdirSync(d).filter((x) => x.endsWith(".mjs"))) files.push(`${d}/${f}`);
     }
-    expect(scanned).toBeGreaterThan(0);
+    return files;
+  }
+
+  it("T-704b ソースに同形異字が混入していない(マーカー行を除く)", () => {
+    const bad = [];
+    const files = scanSources();
+    for (const f of files) {
+      const lines = readFileSync(f, "utf8").split("\n");
+      lines.forEach((line, i) => {
+        if (line.includes(ALLOW)) return;
+        if (CYRILLIC.test(line)) bad.push(`${f}:${i + 1}`);
+      });
+    }
+    expect(files.length).toBeGreaterThan(0);
     expect(bad).toEqual([]);
+  });
+
+  it("T-704c 緩みすぎ止め: 除外マーカーは、実際に非日本語を含む行にだけ付いている", () => {
+    const useless = [];
+    let markers = 0;
+    for (const f of scanSources()) {
+      readFileSync(f, "utf8")
+        .split("\n")
+        .forEach((line, i) => {
+          if (!line.includes(ALLOW)) return;
+          markers += 1;
+          // マーカーを剥がした残りに、本当にキリル文字があるか
+          if (!CYRILLIC.test(line.replace(ALLOW, ""))) useless.push(`${f}:${i + 1}`);
+        });
+    }
+    // マーカーが 1 つも無ければ、この検査は何も見張っていない
+    expect(markers, "除外マーカーが 1 つも無い — T-704b が働いているか疑わしい").toBeGreaterThan(0);
+    expect(useless, "不要な除外マーカーが付いている").toEqual([]);
   });
 
   it("T-705 コーパス本文に混入していない(データ未取得ならスキップ)", () => {

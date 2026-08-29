@@ -20,7 +20,13 @@
     "compare": "node scripts/compare-impl.mjs",
     "quantize": "node scripts/quantize.mjs",
     "sweep": "node scripts/hybrid-sweep.mjs",
-    "control:dense": "node scripts/dense-control.mjs"
+    "control:dense": "node scripts/dense-control.mjs",
+    "fetch:model": "node scripts/fetch-model.mjs",
+    "keep-extra": "node scripts/keep-extra.mjs",
+    "prune": "python scripts/prune_model.py --ascii-max 2",
+    "verify:prune": "node scripts/verify-prune.mjs",
+    "pack": "node scripts/pack-index.mjs",
+    "vendor": "node scripts/vendor-runtime.mjs"
   },
   "devDependencies": {
     "vitest": "^2.1.8"

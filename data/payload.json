@@ -1,0 +1,53 @@
+{
+  "sizes": {
+    "vec_i8.bin": {
+      "raw": 5222400,
+      "gzip": 4616913
+    },
+    "quant.json": {
+      "raw": 15698,
+      "gzip": 6945
+    },
+    "meta.json": {
+      "raw": 200759,
+      "gzip": 33941
+    },
+    "terms.bin": {
+      "raw": 105792,
+      "gzip": 85202
+    },
+    "postings.bin": {
+      "raw": 2317784,
+      "gzip": 1137335
+    },
+    "postings-offsets.bin": {
+      "raw": 105796,
+      "gzip": 79809
+    },
+    "sparse-meta.json": {
+      "raw": 56,
+      "gzip": 76
+    },
+    "dl.bin": {
+      "raw": 27200,
+      "gzip": 17287
+    },
+    "text.bin": {
+      "raw": 5470230,
+      "gzip": 850859
+    },
+    "text-offsets.bin": {
+      "raw": 54404,
+      "gzip": 43769
+    }
+  },
+  "dense": {
+    "raw": 5438857,
+    "gzip": 4657799
+  },
+  "sparse": {
+    "raw": 2556628,
+    "gzip": 1319709
+  },
+  "modelBytes": 32363290
+}
