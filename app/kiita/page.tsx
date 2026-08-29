@@ -40,7 +40,7 @@ export default function Kiita() {
             </tr>
             <tr>
               <td>細かく刻むほど良い</td>
-              <td>項単位 0.3327 / 条単位 <strong>0.4938</strong></td>
+              <td>密は項単位 0.3327 / 条単位 <strong>0.4572</strong></td>
               <td><strong>壊れた。</strong>粗いほうが良い</td>
             </tr>
           </tbody>

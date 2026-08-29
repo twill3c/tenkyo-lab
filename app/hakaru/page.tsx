@@ -254,8 +254,9 @@ export default function Hakaru() {
                 <tr>
                   <td>チャンクの粒度(条の項 / 条)</td>
                   <td>
-                    条単位にすると Recall@10 が <strong>+0.16</strong>(密 0.3327 → 0.4938)。
-                    <strong>粗いほうが良い</strong>
+                    条単位の索引で直接測ると密 <strong>0.4572</strong>(項単位 0.3327)。
+                    <strong>粗いほうが良い。</strong>しかも<strong>勝つ手法が入れ替わり</strong>、
+                    条単位では疎が 0.5373 で密を 8 ポイント上回る
                   </td>
                 </tr>
                 <tr>

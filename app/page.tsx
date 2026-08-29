@@ -47,7 +47,8 @@ export default function Home() {
             <tr>
               <td>細かく刻むほど良い</td>
               <td>
-                <strong>粗いほうが良い</strong>(項単位 0.3327 対 条単位 0.4938)
+                <strong>粗いほうが良い</strong>(密は項単位 0.3327 対 条単位 0.4572)。
+                しかも<strong>勝つ手法が入れ替わる</strong>
               </td>
             </tr>
           </tbody>
@@ -68,6 +69,10 @@ export default function Home() {
       <p>
         <a href="/hiku/">引く</a> —— 質問を入れると、埋め込み・検索・文脈の組み立て・回答の
         各段の中身がすべて開いた状態で出ます。
+      </p>
+      <p>
+        <a href="/kizamu/">刻む</a> —— 同じ条文を二つの粒度で刻んで、実物と数字で比べます。
+        <strong>粗いほうが引きやすく、勝つ手法まで入れ替わります</strong>。
       </p>
       <p>
         <a href="/hakaru/">測る</a> —— つまみを回すと 2,808 問の指標がその場で動きます。

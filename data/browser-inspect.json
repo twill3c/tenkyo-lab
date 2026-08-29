@@ -14,8 +14,8 @@
         "129AC0000000089#398_7-1",
         "129AC0000000089#398_7-2"
       ],
-      "bytes": 30389203,
-      "cumulative": 30389203,
+      "bytes": 50832889,
+      "cumulative": 50832889,
       "answers": 10
     },
     {
@@ -33,7 +33,7 @@
         "347AC0000000057#10-1"
       ],
       "bytes": 10983,
-      "cumulative": 30400186,
+      "cumulative": 50843872,
       "answers": 10
     }
   ],
@@ -43,6 +43,19 @@
   },
   "lowContrast": [],
   "contrastCanary": 1,
+  "kizamu": {
+    "rows": 6,
+    "sampleParagraphs": 6,
+    "longestSample": 684,
+    "hasCorrection": true,
+    "bytes": 18859,
+    "heavy": 0
+  },
+  "g18": {
+    "bytes": 18859,
+    "limit": 1048576,
+    "pass": true
+  },
   "staticPages": [
     {
       "path": "/kiita/",
@@ -86,20 +99,20 @@
       ]
     ],
     "knobMoved": true,
-    "bytes": 513127,
+    "bytes": 616926,
     "perLawRows": 17,
     "indexRequests": 0,
     "external": 0
   },
   "g15": {
-    "bytes": 513127,
+    "bytes": 616926,
     "limit": 1572864,
     "pass": true
   },
   "consoleErrors": [],
   "external": [],
   "g11": {
-    "bytes": 30389203,
+    "bytes": 50832889,
     "limit": 52428800,
     "pass": true
   },

@@ -222,6 +222,47 @@ async function main() {
   console.log(`  文字が埋もれている要素: ${lowContrast.length} 件(陽性対照は ${canary.length} 件で捕捉)`);
   if (lowContrast.length) console.log("   ", JSON.stringify(lowContrast.slice(0, 5)));
   await hakaru.screenshot({ path: resolve(ROOT, "data/hakaru.png"), fullPage: true });
+  // --- 「刻む」ページ(G-18 / 実物と数字が出るか) ---
+  const kizamu = await ctx.newPage();
+  const kizamuReqs = [];
+  kizamu.on("request", (r) => kizamuReqs.push(r.url()));
+  kizamu.on("console", (m) => {
+    if (m.type() === "error") consoleErrors.push(`[kizamu] ${m.text()}`);
+  });
+  kizamu.on("pageerror", (e) => consoleErrors.push(`[kizamu] pageerror: ${e.message}`));
+  await kizamu.goto(`${BASE}/kizamu/`, { waitUntil: "networkidle" });
+  await kizamu.waitForSelector('[data-testid="granularity"] tbody tr', { timeout: 120000 });
+  const gRows = await kizamu.$$('[data-testid="granularity"] tbody tr');
+  const sampleText = await kizamu.$$eval('[data-testid="samples"] p', (els) =>
+    els.map((e) => (e.textContent ?? "").length)
+  );
+  const correction = await kizamu.$('[data-testid="correction"]');
+  const kizamuBytes = await kizamu.evaluate(() =>
+    performance
+      .getEntriesByType("resource")
+      .filter((e) => e.name.includes("/tenkyo/"))
+      .reduce((a, e) => a + (e.transferSize || e.encodedBodySize || 0), 0)
+  );
+  const kizamuHeavy = kizamuReqs.filter((u) => /\/tenkyo\/(index|model|ort)\//.test(u));
+  lowContrast.push(
+    ...(await contrastCheck(kizamu, "button, a, td, th, p, span, h1, h2, h3")).map((x) => ({ page: "kizamu", ...x }))
+  );
+  await kizamu.screenshot({ path: resolve(ROOT, "data/kizamu.png"), fullPage: true });
+  await kizamu.close();
+  report.kizamu = {
+    rows: gRows.length,
+    sampleParagraphs: sampleText.length,
+    longestSample: Math.max(0, ...sampleText),
+    hasCorrection: Boolean(correction),
+    bytes: kizamuBytes,
+    heavy: kizamuHeavy.length,
+  };
+  report.g18 = { bytes: kizamuBytes, limit: 1048576, pass: kizamuBytes <= 1048576 };
+  console.log(
+    `  /kizamu/ 指標の行 ${gRows.length} / 実物の段落 ${sampleText.length} / 訂正の記載 ${correction ? "あり" : "なし"}`
+  );
+  console.log(`  ${report.g18.pass ? "○" : "×"} G-18 追加取得 ${(kizamuBytes / 1024).toFixed(1)} KB  上限 1024 KB`);
+
   // --- 静的ページ(索引も模型も取らないことを確かめる) ---
   const staticPages = [];
   for (const path of ["/kiita/", "/tsukurikata/"]) {
@@ -311,6 +352,11 @@ async function main() {
     if (s.tables < 3) fatal.push(`${s.path} の表が少なすぎる: ${s.tables}`);
     if (!s.heading) fatal.push(`${s.path} の見出しが空`);
   }
+  if (!report.g18.pass) fatal.push("G-18 超過");
+  if (report.kizamu.rows !== 6) fatal.push(`「刻む」の指標の行が 6 でない: ${report.kizamu.rows}`);
+  if (report.kizamu.longestSample < 100) fatal.push("「刻む」の条文の実物が出ていない");
+  if (!report.kizamu.hasCorrection) fatal.push("「刻む」に訂正の記載が無い");
+  if (report.kizamu.heavy !== 0) fatal.push("「刻む」が索引・模型を取りに行った");
   if (report.lowContrast.length !== 0) fatal.push(`文字が背景に埋もれている: ${report.lowContrast.length} 件`);
   if (report.contrastCanary !== 1) fatal.push("対比の検査器が陽性対照を捕まえられない — 検査器が壊れている");
   if (topIndexReqs.length !== 0) fatal.push("N-03: トップページが索引を取りに行った");
