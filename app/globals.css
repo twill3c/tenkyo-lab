@@ -29,8 +29,20 @@ nav.top { border-bottom: 1px solid var(--line); background: #fff; }
 nav.top div { max-width: 62rem; margin: 0 auto; padding: 0.7rem 1.25rem; display: flex; gap: 1.2rem; align-items: baseline; }
 nav.top strong { letter-spacing: 0.16em; }
 nav.top a { text-decoration: none; font-size: 0.9rem; }
-footer { border-top: 1px solid var(--line); margin-top: 4rem; padding-top: 1.2rem; font-size: 0.8rem; color: var(--muted); }
-footer p { margin: 0.3rem 0; }
+.attrib { max-width: 62rem; margin: 4rem auto 0; padding: 1.2rem 1.25rem 0; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--muted); }
+.attrib p { margin: 0.3rem 0; }
+
+/* fleet: fixed footer */
+body { padding-bottom: 3.2rem; }
+footer.fleet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  background: #fff; border-top: 1px solid var(--line);
+  padding: 0.55rem 1.25rem;
+  display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; justify-content: center;
+  font-size: 0.78rem; color: var(--muted);
+}
+footer.fleet a { color: var(--accent); text-decoration: none; }
+footer.fleet a:hover, footer.fleet a:focus-visible { text-decoration: underline; }
 .card { border: 1px solid var(--line); background: #fff; padding: 1rem 1.15rem; margin: 0.8rem 0; }
 .stage { border-left: 3px solid var(--accent-soft); padding-left: 0.9rem; margin: 1.2rem 0; }
 .stage > .label { font-size: 0.78rem; letter-spacing: 0.12em; color: var(--muted); }

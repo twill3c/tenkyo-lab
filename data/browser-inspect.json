@@ -41,6 +41,38 @@
     "indexRequests": 0,
     "heading": "典拠ラボ"
   },
+  "footer": {
+    "items": [
+      {
+        "tag": "SPAN",
+        "text": "MIT License © 2026 坂田哲朗",
+        "href": null
+      },
+      {
+        "tag": "A",
+        "text": "GitHub",
+        "href": "https://github.com/twill3c/tenkyo-lab"
+      },
+      {
+        "tag": "A",
+        "text": "典拠ラボの歩き方",
+        "href": "https://claude.ai/code/artifact/f7cc1a9c-1236-4425-b9f6-b99087f6a7fc"
+      },
+      {
+        "tag": "A",
+        "text": "典拠ラボの設計図",
+        "href": "https://claude.ai/code/artifact/7295b03e-9c89-4faf-9780-011515639650"
+      },
+      {
+        "tag": "A",
+        "text": "App Menu",
+        "href": "https://app-menu-amber.vercel.app/"
+      }
+    ],
+    "position": "fixed",
+    "visible": true,
+    "bottom": 0
+  },
   "lowContrast": [],
   "contrastCanary": 1,
   "kizamu": {

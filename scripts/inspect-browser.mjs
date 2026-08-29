@@ -125,6 +125,18 @@ async function main() {
   report.topPage = { indexRequests: topIndexReqs.length, heading: h1 };
   console.log(`N-03 トップページの索引・模型への取得: ${topIndexReqs.length} 件`);
 
+  // --- フリート共通フッタ(5 項目・下部固定・本文と重ならない) ---
+  const footer = await page.$$eval("footer.fleet > *", (els) =>
+    els.map((e) => ({ tag: e.tagName, text: (e.textContent ?? "").trim(), href: e.getAttribute("href") }))
+  );
+  const footerFixed = await page.$eval("footer.fleet", (e) => {
+    const cs = getComputedStyle(e);
+    const r = e.getBoundingClientRect();
+    return { position: cs.position, visible: r.height > 0 && r.width > 0, bottom: Math.round(innerHeight - r.bottom) };
+  });
+  report.footer = { items: footer, ...footerFixed };
+  console.log(`フッタ ${footer.length} 項目 / ${footerFixed.position} / 下端からの距離 ${footerFixed.bottom}px`);
+
   // --- 一問目 ---
   await page.goto(`${BASE}/hiku/`, { waitUntil: "networkidle" });
   for (const [n, q] of QUERIES.entries()) {
@@ -357,6 +369,11 @@ async function main() {
   if (report.kizamu.longestSample < 100) fatal.push("「刻む」の条文の実物が出ていない");
   if (!report.kizamu.hasCorrection) fatal.push("「刻む」に訂正の記載が無い");
   if (report.kizamu.heavy !== 0) fatal.push("「刻む」が索引・模型を取りに行った");
+  if (report.footer.items.length !== 5) fatal.push(`フッタが 5 項目でない: ${report.footer.items.length}`);
+  if (report.footer.position !== "fixed") fatal.push("フッタが下部固定でない");
+  if (!report.footer.visible) fatal.push("フッタが見えていない");
+  if (report.footer.items.some((x) => !x.text)) fatal.push("フッタに空の項目がある");
+  if (report.footer.items.filter((x) => x.tag === "A").length !== 4) fatal.push("フッタのリンクが 4 本でない");
   if (report.lowContrast.length !== 0) fatal.push(`文字が背景に埋もれている: ${report.lowContrast.length} 件`);
   if (report.contrastCanary !== 1) fatal.push("対比の検査器が陽性対照を捕まえられない — 検査器が壊れている");
   if (topIndexReqs.length !== 0) fatal.push("N-03: トップページが索引を取りに行った");

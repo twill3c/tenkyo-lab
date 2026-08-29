@@ -298,11 +298,6 @@ export default function Kiita() {
         </table>
       </div>
 
-      <footer>
-        <p>出典:「e-Gov 法令検索」(デジタル庁)https://laws.e-gov.go.jp/</p>
-        <p>上記コンテンツを条・項の単位に分割し索引化する加工を行っています(作成者による加工)。</p>
-        <p>本サイトは検索技術の実験台です。掲載する条文は法的助言ではありません。</p>
-      </footer>
     </>
   );
 }
