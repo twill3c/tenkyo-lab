@@ -9,9 +9,16 @@
     "fetch": "node scripts/fetch-laws.mjs",
     "chunks": "node scripts/build-chunks.mjs",
     "oracle": "node scripts/build-oracle.mjs",
-    "review": "node scripts/sample-review.mjs"
+    "review": "node scripts/sample-review.mjs",
+    "embed": "node scripts/embed.mjs",
+    "embed:queries": "node scripts/embed-queries.mjs",
+    "embed:negatives": "node scripts/embed-queries.mjs --source data/negatives.json --name negative",
+    "eval": "node scripts/evaluate.mjs"
   },
   "devDependencies": {
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0"
   }
 }

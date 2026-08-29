@@ -17,6 +17,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { extractRefs, countRelativeRefs, maskRefs } from "../src/lib/refs.mjs";
 import { articleNumToLabel } from "../src/lib/lawparse.mjs";
+import { substantiveLength, bigrams } from "../src/lib/tokenize.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -59,13 +60,6 @@ const DISTINCTIVE_DF_RATIO = 0.005;
 /** クエリに残っていることを要求する識別力のあるバイグラムの数。 */
 const MIN_DISTINCTIVE_BIGRAMS = 3;
 
-export function bigrams(s) {
-  const t = s.replace(SYMBOLS, "");
-  const out = new Set();
-  for (let i = 0; i + 2 <= t.length; i++) out.add(t.slice(i, i + 2));
-  return out;
-}
-
 /** チャンク集合から、各バイグラムが何チャンクに現れるかを数える。 */
 export function documentFrequency(chunks) {
   const df = new Map();
@@ -82,12 +76,7 @@ export function distinctiveCount(query, df, total) {
   return n;
 }
 
-const SYMBOLS = /[、。・「」『』（）()［］\[\]〔〕，．\s]/g;
-
-/** 記号を除いた実質の文字数。 */
-export function substantiveLength(s) {
-  return s.replace(SYMBOLS, "").length;
-}
+export { substantiveLength, bigrams } from "../src/lib/tokenize.mjs";
 
 /** 文へ割る。法令の括弧書きは長いが句点を含むことは稀なので、句点だけで割る。 */
 export function splitSentences(text) {

@@ -1,0 +1,10 @@
+{
+  "sample": 300,
+  "misses": 0,
+  "dupHits": 11,
+  "rate": 1,
+  "minNorm": 0.99999936009111,
+  "maxNorm": 1.000000652178914,
+  "zeroRows": 0,
+  "examples": []
+}

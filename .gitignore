@@ -9,3 +9,6 @@ data/raw/
 data/chunks.json
 data/oracle.json
 data/*.jsonl
+data/index/
+data/model-cache/
+data/oracle.prev.json
