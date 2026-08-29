@@ -41,6 +41,43 @@
     "indexRequests": 0,
     "heading": "典拠ラボ"
   },
+  "lowContrast": [],
+  "contrastCanary": 1,
+  "hakaru": {
+    "rows": [
+      [
+        "密(意味)",
+        "0.3327",
+        "0.3722",
+        "0.1610",
+        "0.1845"
+      ],
+      [
+        "疎(語・BM25)",
+        "0.3374",
+        "0.3821",
+        "0.1595",
+        "0.1835"
+      ],
+      [
+        "ハイブリッド(RRF) k=60",
+        "0.3740",
+        "0.4184",
+        "0.1779",
+        "0.2064"
+      ]
+    ],
+    "knobMoved": true,
+    "bytes": 616926,
+    "perLawRows": 17,
+    "indexRequests": 0,
+    "external": 0
+  },
+  "g15": {
+    "bytes": 616926,
+    "limit": 1572864,
+    "pass": true
+  },
   "consoleErrors": [],
   "external": [],
   "g11": {

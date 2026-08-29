@@ -1,0 +1,48 @@
+{
+  "sizes": {
+    "rank-dense.bin": {
+      "raw": 280800,
+      "gzip": 226527
+    },
+    "rank-sparse.bin": {
+      "raw": 280800,
+      "gzip": 224937
+    },
+    "rank-len.bin": {
+      "raw": 5616,
+      "gzip": 41
+    },
+    "gold-counts.bin": {
+      "raw": 2808,
+      "gzip": 536
+    },
+    "gold-values.bin": {
+      "raw": 7312,
+      "gzip": 5973
+    },
+    "exclude.bin": {
+      "raw": 5616,
+      "gzip": 4940
+    },
+    "item-law.bin": {
+      "raw": 2808,
+      "gzip": 92
+    },
+    "id-order.bin": {
+      "raw": 27200,
+      "gzip": 24482
+    },
+    "eval-meta.json": {
+      "raw": 1266,
+      "gzip": 719
+    },
+    "queries.json": {
+      "raw": 752443,
+      "gzip": 129099
+    }
+  },
+  "total": {
+    "raw": 614226,
+    "gzip": 488247
+  }
+}

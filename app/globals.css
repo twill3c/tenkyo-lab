@@ -43,7 +43,9 @@ button { font: inherit; padding: 0.55rem 1.2rem; border: 1px solid var(--accent)
 button:disabled { opacity: 0.45; cursor: default; }
 button.ghost { background: #fff; color: var(--accent); }
 .row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
-.pill { border: 1px solid var(--line); background: #fff; padding: 0.25rem 0.7rem; font-size: 0.82rem; cursor: pointer; }
+/* button の color: #fff を必ず上書きする。上書きし忘れると白背景に白文字になり、
+   押したものだけが見えるという壊れ方をする(loop_006 で実際に出荷しかけた)。 */
+.pill { border: 1px solid var(--line); background: #fff; color: var(--fg); padding: 0.25rem 0.7rem; font-size: 0.82rem; cursor: pointer; }
 .pill[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 .note { font-size: 0.82rem; color: var(--muted); }
 .warnbox { border: 1px solid var(--warn); background: #fdf6e9; padding: 0.7rem 0.9rem; font-size: 0.85rem; margin: 1rem 0; }

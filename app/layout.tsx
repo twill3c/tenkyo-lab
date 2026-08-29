@@ -16,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <strong>典拠ラボ</strong>
             <a href="/">はじめに</a>
             <a href="/hiku/">引く</a>
+            <a href="/hakaru/">測る</a>
           </div>
         </nav>
         <main>{children}</main>

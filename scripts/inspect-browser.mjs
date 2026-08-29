@@ -73,6 +73,43 @@ async function main() {
 
   const report = { queries: [] };
 
+  /**
+   * 文字が背景に埋もれていないかを、算出スタイルで確かめる。
+   * **DOM に文字があることは、見えていることを確かめない**(loop_006 で白背景に白文字を出荷しかけた)。
+   * 相対輝度の差が小さすぎる要素を拾う。
+   */
+  const contrastCheck = async (pg, selector) =>
+    pg.$$eval(selector, (els) => {
+      const lum = (c) => {
+        const m = c.match(/[\d.]+/g).map(Number);
+        const [r, g, b] = m.slice(0, 3).map((v) => {
+          const x = v / 255;
+          return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const bgOf = (el) => {
+        let n = el;
+        while (n) {
+          const bg = getComputedStyle(n).backgroundColor;
+          if (bg && !/rgba?\(0, 0, 0, 0\)|transparent/.test(bg)) return bg;
+          n = n.parentElement;
+        }
+        return "rgb(255,255,255)";
+      };
+      const bad = [];
+      for (const el of els) {
+        const text = (el.textContent ?? "").trim();
+        if (!text) continue;
+        const fg = getComputedStyle(el).color;
+        const a = lum(fg) + 0.05;
+        const b = lum(bgOf(el)) + 0.05;
+        const ratio = a > b ? a / b : b / a;
+        if (ratio < 3) bad.push({ text: text.slice(0, 18), fg, bg: bgOf(el), ratio: Number(ratio.toFixed(2)) });
+      }
+      return bad;
+    });
+
   // --- N-03 トップページは索引を 1 バイトも取らない ---
   const r1 = await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
   if (!r1 || !r1.ok()) throw new Error(`トップページが開けない: ${r1 && r1.status()}`);
@@ -120,6 +157,81 @@ async function main() {
   }
 
   await page.screenshot({ path: resolve(ROOT, "data/hiku.png"), fullPage: true });
+
+  // --- 「測る」ページ(G-15 / つまみが効いているか) ---
+  const hakaru = await ctx.newPage();
+  const hakaruExternal = [];
+  const hakaruIndexReqs = [];
+  hakaru.on("request", (r) => {
+    const u = r.url();
+    if (!u.startsWith(BASE) && !u.startsWith("data:") && !u.startsWith("blob:")) hakaruExternal.push(u);
+    if (/\/tenkyo\/(index|model|ort)\//.test(u)) hakaruIndexReqs.push(u);
+  });
+  hakaru.on("console", (m) => {
+    if (m.type() === "error") consoleErrors.push(`[hakaru] ${m.text()}`);
+  });
+  hakaru.on("pageerror", (e) => consoleErrors.push(`[hakaru] pageerror: ${e.message}`));
+  await hakaru.goto(`${BASE}/hakaru/`, { waitUntil: "networkidle" });
+  await hakaru.waitForSelector('[data-testid="metrics"] tbody tr', { timeout: 120000 });
+
+  const readMetrics = async () =>
+    hakaru.$$eval('[data-testid="metrics"] tbody tr', (els) =>
+      els.map((tr) => [...tr.querySelectorAll("td")].map((td) => td.textContent?.trim() ?? ""))
+    );
+  const at60 = await readMetrics();
+  if (at60.length !== 3) throw new Error(`指標の行が 3 行でない: ${at60.length}`);
+  // つまみを動かすと数字が動くか(効いていることの確認)
+  await hakaru.click('button.pill[aria-pressed="false"]:text-is("10")');
+  await hakaru.waitForTimeout(400);
+  const at10 = await readMetrics();
+  const moved = JSON.stringify(at60) !== JSON.stringify(at10);
+
+  const evalBytes = await hakaru.evaluate(() =>
+    performance
+      .getEntriesByType("resource")
+      .filter((e) => e.name.includes("/tenkyo/eval/"))
+      .reduce((a, e) => a + (e.transferSize || e.encodedBodySize || 0), 0)
+  );
+  const perLawRows = await hakaru.$$('[data-testid="perlaw"] tbody tr');
+  // 文字が背景に埋もれていないか(両ページ)
+  const lowContrast = [
+    ...(await contrastCheck(hakaru, "button, a, td, th, p, span, h1, h2, h3")).map((x) => ({ page: "hakaru", ...x })),
+    ...(await contrastCheck(page, "button, a, td, th, p, span, h1, h2, h3")).map((x) => ({ page: "hiku", ...x })),
+  ];
+  report.lowContrast = lowContrast;
+
+  // **陽性対照。** 「0 件」は「検査した」を意味しない(HC-041)。
+  // 白背景に白文字の要素をその場で差し込み、検査器が必ず捕まえることを確かめる。
+  // 捕まえられなければ検査器が壊れているので、検品全体を落とす。
+  await hakaru.evaluate(() => {
+    const el = document.createElement("p");
+    el.id = "contrast-canary";
+    el.textContent = "この文字は見えないはずです";
+    el.style.cssText = "color:#fff;background:#fff";
+    document.body.appendChild(el);
+  });
+  const canary = await contrastCheck(hakaru, "#contrast-canary");
+  await hakaru.evaluate(() => document.getElementById("contrast-canary")?.remove());
+  report.contrastCanary = canary.length;
+  console.log(`  文字が埋もれている要素: ${lowContrast.length} 件(陽性対照は ${canary.length} 件で捕捉)`);
+  if (lowContrast.length) console.log("   ", JSON.stringify(lowContrast.slice(0, 5)));
+  await hakaru.screenshot({ path: resolve(ROOT, "data/hakaru.png"), fullPage: true });
+  await hakaru.close();
+
+  report.hakaru = {
+    rows: at60,
+    knobMoved: moved,
+    bytes: evalBytes,
+    perLawRows: perLawRows.length,
+    indexRequests: hakaruIndexReqs.length,
+    external: hakaruExternal.length,
+  };
+  report.g15 = { bytes: evalBytes, limit: 1.5 * 1048576, pass: evalBytes <= 1.5 * 1048576 };
+  console.log(`\n--- 「測る」ページ ---`);
+  console.log(`  指標(RRF k=60・上位10): ${at60.map((r) => `${r[0]}=${r[1]}`).join(" / ")}`);
+  console.log(`  つまみで数字が動いた: ${moved ? "はい" : "いいえ"}`);
+  console.log(`  法令別の行: ${perLawRows.length} / 索引・模型への取得: ${hakaruIndexReqs.length} 件`);
+  console.log(`  ${report.g15.pass ? "○" : "×"} G-15 追加取得 ${mb(evalBytes)} MB  上限 1.50 MB`);
   report.consoleErrors = consoleErrors;
   report.external = [...new Set(external)];
   report.g11 = { bytes: report.queries[0].cumulative, limit: G11_LIMIT, pass: report.queries[0].cumulative <= G11_LIMIT };
@@ -156,6 +268,13 @@ async function main() {
 
   const fatal = [];
   if (!report.g14.pass) fatal.push("G-14: ブラウザと Node の順位が違う");
+  if (!report.g15.pass) fatal.push("G-15 超過");
+  if (!report.hakaru.knobMoved) fatal.push("「測る」のつまみを動かしても数字が変わらない");
+  if (report.hakaru.indexRequests !== 0) fatal.push("「測る」が索引・模型を取りに行った");
+  if (report.hakaru.external !== 0) fatal.push("「測る」が外部オリジンへ通信した");
+  if (report.hakaru.perLawRows < 10) fatal.push(`法令別の行が少なすぎる: ${report.hakaru.perLawRows}`);
+  if (report.lowContrast.length !== 0) fatal.push(`文字が背景に埋もれている: ${report.lowContrast.length} 件`);
+  if (report.contrastCanary !== 1) fatal.push("対比の検査器が陽性対照を捕まえられない — 検査器が壊れている");
   if (topIndexReqs.length !== 0) fatal.push("N-03: トップページが索引を取りに行った");
   if (report.external.length !== 0) fatal.push("N-02: 外部オリジンへ通信した");
   if (consoleErrors.length !== 0) fatal.push(`コンソールにエラー ${consoleErrors.length} 件`);
