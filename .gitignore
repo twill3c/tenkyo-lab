@@ -12,3 +12,7 @@ data/*.jsonl
 data/index/
 data/model-cache/
 data/oracle.prev.json
+data/ranks-ts.json
+data/ranks-py.json
+__pycache__/
+.pytest_cache/

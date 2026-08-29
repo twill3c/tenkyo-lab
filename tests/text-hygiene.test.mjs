@@ -82,6 +82,40 @@ describe("N-07 文字種検査", () => {
     expect(bad.map((c) => c.id)).toEqual([]);
   });
 
+  it("T-707 陽性対照: 制御文字の検出器は既知の悪い例を捕まえ、正当な空白を撃たない", () => {
+    const CTRL = /[\x00-\x08\x0b\x0c\x0e-\x1f]/;
+    // **悪い例は必ずエスケープ表記で組み立てる。** リテラルで書くと、
+    // このファイル自身が T-708 の走査に引っかかる(loop_003 で実際にそうなった)
+    const SOH = String.fromCharCode(1);
+    expect(CTRL.test(`join("${SOH}")`)).toBe(true); // loop_003 で実際に混入した形
+    expect(CTRL.test(`a${String.fromCharCode(0)}b`)).toBe(true);
+    // 陰性対照: 改行・タブ・全角空白は正当
+    expect(CTRL.test("a\nb\tc　d")).toBe(false);
+  });
+
+  it("T-708 ソースに制御文字が混入していない", () => {
+    // loop_003: dump-ranks.mjs の join("") に U+0001 が紛れ、G-04 が偽の不一致を出した。
+    // **ソースを開いても検索しても見えない**(cat -A で ^A として初めて見える)。
+    // 構文エラーにならないので、テストで見張るしかない(HC-042)
+    const CTRL = /[\x00-\x08\x0b\x0c\x0e-\x1f]/g;
+    const dirs = ["src/lib", "scripts", "tests", "harness/reference"];
+    const bad = [];
+    let scanned = 0;
+    for (const d of dirs) {
+      if (!existsSync(d)) continue;
+      for (const f of readdirSync(d).filter((x) => /\.(mjs|py|json)$/.test(x))) {
+        scanned += 1;
+        const t = readFileSync(`${d}/${f}`, "utf8");
+        for (const m of t.matchAll(CTRL)) {
+          const line = t.slice(0, m.index).split("\n").length;
+          bad.push(`${d}/${f}:${line} U+${m[0].codePointAt(0).toString(16).padStart(4, "0")}`);
+        }
+      }
+    }
+    expect(scanned).toBeGreaterThan(0);
+    expect(bad).toEqual([]);
+  });
+
   it("T-706 陰性対照の一覧には、意図した非日本語が実在する", () => {
     // 陰性対照が全部日本語になっていたら、陰性対照として働いていない
     const neg = JSON.parse(readFileSync("data/negatives.json", "utf8"));

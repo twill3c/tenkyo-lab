@@ -1,0 +1,96 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "label": "層1 分かち書き(チャンク全件)",
+      "pass": true,
+      "n": 13600,
+      "mismatches": 0,
+      "detail": []
+    },
+    {
+      "label": "層1 分かち書き(クエリ全件)",
+      "pass": true,
+      "n": 2808,
+      "mismatches": 0,
+      "detail": []
+    },
+    {
+      "label": "層1 文書長の総和ハッシュ",
+      "pass": true,
+      "detail": [
+        "ts=414a914921522cc6 py=414a914921522cc6"
+      ]
+    },
+    {
+      "label": "層2 疎索引 N",
+      "pass": true,
+      "detail": [
+        "ts=13600 py=13600"
+      ]
+    },
+    {
+      "label": "層2 疎索引 termCount",
+      "pass": true,
+      "detail": [
+        "ts=26448 py=26448"
+      ]
+    },
+    {
+      "label": "層2 疎索引 dlSum",
+      "pass": true,
+      "detail": [
+        "ts=1563449 py=1563449"
+      ]
+    },
+    {
+      "label": "層2 疎索引 termsHash",
+      "pass": true,
+      "detail": [
+        "ts=1b01c69929319ba3 py=1b01c69929319ba3"
+      ]
+    },
+    {
+      "label": "層2 疎索引 dfHash",
+      "pass": true,
+      "detail": [
+        "ts=e02a33fe5ad30539 py=e02a33fe5ad30539"
+      ]
+    },
+    {
+      "label": "層2 疎索引 avgdl(完全一致)",
+      "pass": true,
+      "detail": [
+        "ts=114.95948529411764 py=114.95948529411764"
+      ]
+    },
+    {
+      "label": "層3 疎検索の順位",
+      "pass": true,
+      "n": 200,
+      "mismatches": 0,
+      "detail": []
+    },
+    {
+      "label": "層3 密検索の順位",
+      "pass": true,
+      "n": 20,
+      "mismatches": 0,
+      "detail": []
+    },
+    {
+      "label": "層3 融合(RRF)の順位",
+      "pass": true,
+      "n": 20,
+      "mismatches": 0,
+      "detail": []
+    },
+    {
+      "label": "層3 密検索の最上位スコア(ビット一致)",
+      "pass": true,
+      "n": 20,
+      "mismatches": 0,
+      "detail": []
+    }
+  ]
+}

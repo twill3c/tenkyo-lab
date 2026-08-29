@@ -13,7 +13,14 @@
     "embed": "node scripts/embed.mjs",
     "embed:queries": "node scripts/embed-queries.mjs",
     "embed:negatives": "node scripts/embed-queries.mjs --source data/negatives.json --name negative",
-    "eval": "node scripts/evaluate.mjs"
+    "eval": "node scripts/evaluate.mjs",
+    "test:py": "python -m pytest harness/reference -q",
+    "dump:ts": "node scripts/dump-ranks.mjs",
+    "dump:py": "python harness/reference/dump_ranks.py",
+    "compare": "node scripts/compare-impl.mjs",
+    "quantize": "node scripts/quantize.mjs",
+    "sweep": "node scripts/hybrid-sweep.mjs",
+    "control:dense": "node scripts/dense-control.mjs"
   },
   "devDependencies": {
     "vitest": "^2.1.8"
