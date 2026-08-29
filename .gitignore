@@ -18,3 +18,7 @@ __pycache__/
 .pytest_cache/
 data/model-src/
 data/keep-extra.json
+.next/
+next-env.d.ts
+.vercel
+data/hiku.png
