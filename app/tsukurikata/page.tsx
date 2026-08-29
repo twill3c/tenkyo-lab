@@ -117,13 +117,19 @@ export default function Tsukurikata() {
           <thead><tr><th>いつ</th><th>何を</th><th className="num">量</th></tr></thead>
           <tbody>
             <tr><td>トップページ</td><td><strong>索引を 1 バイトも取らない</strong></td><td className="num">0</td></tr>
-            <tr><td>一問目</td><td>模型 + 実行系 + 密索引</td><td className="num">48.48MB</td></tr>
+            <tr><td>一問目</td><td>模型 + 実行系 + 密索引</td><td className="num">28.98MB</td></tr>
             <tr><td>つまみ</td><td>疎索引(疎・ハイブリッドを選んだときだけ)</td><td className="num">2.44MB</td></tr>
             <tr><td>結果表示</td><td>条文の一節だけ(HTTP Range)</td><td className="num">数 KB</td></tr>
             <tr><td>二問目以降</td><td>問い合わせの埋め込みと条文の一節だけ</td><td className="num">10.7KB</td></tr>
           </tbody>
         </table>
       </div>
+      <p className="note">
+        数字は<strong>本番に対する実ブラウザ実測</strong>です。配信側が模型と実行系を圧縮するため、
+        ローカルで配ったとき(48.48MB)より 4 割ほど小さくなります。
+        <strong>「ローカルで通った」は本番の正しさの証拠になりません</strong> —— 配信側のヘッダも
+        HTTP Range の扱いも、ローカルのビルドは一切読まないからです。
+      </p>
       <h3>模型を三分の一に刈った</h3>
       <p>
         multilingual-e5-small は 112.8MB のうち大半が語彙表です。XLM-R の 250,002 語には

@@ -25,3 +25,6 @@ data/hiku.png
 data/chunks-article.json
 data/index-article/
 data/hakaru.png
+
+.vercel
+.env*

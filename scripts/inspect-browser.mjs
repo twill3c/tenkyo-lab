@@ -15,7 +15,12 @@ import { createServer } from "./serve-out.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = 4321;
-const BASE = `http://127.0.0.1:${PORT}`;
+// 既定は out/ をローカルで配る。--base https://… を渡すと**本番に対して**検品する。
+// 「ローカルで通った」は本番の正しさの証拠にならない —— .vercelignore やヘッダ、
+// HTTP Range の扱いはローカルのビルドが一切読まない(HC-055)。
+const baseArgIdx = process.argv.indexOf("--base");
+const REMOTE = baseArgIdx > 0 ? process.argv[baseArgIdx + 1].replace(/\/$/, "") : null;
+const BASE = REMOTE ?? `http://127.0.0.1:${PORT}`;
 const QUERIES = [
   "根抵当権の共有者が同意を得て権利を譲り渡す",
   "統括安全衛生責任者の業務の執行について準用する",
@@ -52,8 +57,9 @@ async function computeInNode(queries) {
 }
 
 async function main() {
-  const server = createServer();
-  await new Promise((r) => server.listen(PORT, r));
+  const server = REMOTE ? null : createServer();
+  if (server) await new Promise((r) => server.listen(PORT, r));
+  if (REMOTE) console.log(`本番に対する検品: ${REMOTE}`);
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 1400 } });
   const page = await ctx.newPage();
@@ -269,7 +275,7 @@ async function main() {
   console.log(`${report.g12.pass ? "○" : "×"} G-12 二問目   ${(report.g12.bytes / 1024).toFixed(1)} KB  上限 1024 KB`);
 
   await browser.close();
-  await new Promise((r) => server.close(r));
+  if (server) await new Promise((r) => server.close(r));
 
   // --- G-14 ブラウザと Node が同じ答えを出すか ---
   // **比べるのは同じ配布物どうし**。両側とも public/tenkyo/ の量子化索引と刈った模型を使う。

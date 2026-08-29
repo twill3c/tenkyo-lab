@@ -14,8 +14,8 @@
         "129AC0000000089#398_7-1",
         "129AC0000000089#398_7-2"
       ],
-      "bytes": 50832889,
-      "cumulative": 50832889,
+      "bytes": 30389203,
+      "cumulative": 30389203,
       "answers": 10
     },
     {
@@ -33,7 +33,7 @@
         "347AC0000000057#10-1"
       ],
       "bytes": 10983,
-      "cumulative": 50843872,
+      "cumulative": 30400186,
       "answers": 10
     }
   ],
@@ -86,20 +86,20 @@
       ]
     ],
     "knobMoved": true,
-    "bytes": 616926,
+    "bytes": 513127,
     "perLawRows": 17,
     "indexRequests": 0,
     "external": 0
   },
   "g15": {
-    "bytes": 616926,
+    "bytes": 513127,
     "limit": 1572864,
     "pass": true
   },
   "consoleErrors": [],
   "external": [],
   "g11": {
-    "bytes": 50832889,
+    "bytes": 30389203,
     "limit": 52428800,
     "pass": true
   },

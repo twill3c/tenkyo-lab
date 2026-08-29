@@ -141,7 +141,7 @@ export default function Hiku() {
         </div>
         {!firstDone && (
           <p className="note" style={{ marginTop: "0.8rem" }}>
-            初回の一問だけ模型と索引で約 48MB を取得します。二問目からは数十 KB です。
+            初回の一問だけ模型と索引で約 29MB を取得します。二問目からは約 10KB です。
           </p>
         )}
         {busy && status && <p className="note" data-testid="status">{status}</p>}

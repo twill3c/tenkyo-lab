@@ -81,7 +81,7 @@ export default function Home() {
         <a href="/tsukurikata/">作り方</a> —— 素材の集め方から配り方まで。数字はすべて実測です。
       </p>
       <div className="warnbox">
-        初回の一問だけ、模型と索引で <strong>およそ 48MB</strong> を取得します(二問目からは数十 KB)。
+        初回の一問だけ、模型と索引で <strong>およそ 29MB</strong> を取得します(二問目からは約 10KB)。
         実際に取得した量は画面に出ます。すべて閲覧者の端末で動き、外部の API は使いません。
       </div>
 
