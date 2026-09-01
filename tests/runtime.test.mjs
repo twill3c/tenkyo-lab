@@ -70,7 +70,11 @@ describe.skipIf(!built)("組み上がった束(実行系の寄せ替え)", () =>
       "react.dev": "参考 URL(エラー文)",
       "web.dev": "参考 URL(エラー文)",
       "www.w3.org": "SVG などの名前空間 URI",
-      "laws.e-gov.go.jp": "出典表示(本文中のリンク)",
+      // laws.e-gov.go.jp はここには**居ない**。出典表示は layout の静的な本文で、
+      // 書き出されるのは HTML と RSC の payload であって .js の束ではない
+      // (2026-09-01 実測: out/ の .html 8 件・.txt 6 件にあり、.js には 0 件)。
+      // 一覧に残すと「死んだ除外」になり、下の緩みすぎ止めが落ちる。
+      // 出典表示そのものは T-1008 が HTML 側で見る。
     };
     const found = new Set();
     for (const f of files.filter((x) => x.endsWith(".js"))) {
@@ -99,6 +103,23 @@ describe.skipIf(!built)("組み上がった束(実行系の寄せ替え)", () =>
       "tenkyo/model/tokenizer.json",
     ]) {
       expect(existsSync(join(OUT, f)), `${f} が無い`).toBe(true);
+    }
+  });
+  it("T-1008 全ページに e-Gov の出典と加工の記載がある(PDL1.0)", () => {
+    // 公共データ利用規約 1.0 は**出典の記載**と**加工した旨の記載**を義務づける。
+    // これまでこの義務は、T-1005 のホスト一覧に載っていたことで**偶然**守られていた。
+    // 束の書き出し方が変われば黙って消える置き方だったので、HTML 側に据え直す。
+    const pages = files.filter((f) => f.endsWith(".html") && !f.includes("404"));
+    expect(pages.length).toBeGreaterThan(0);
+    for (const f of pages) {
+      const html = readFileSync(f, "utf8");
+      expect(html.includes("laws.e-gov.go.jp"), `${f} に出典の URL が無い`).toBe(true);
+      expect(html.includes("e-Gov 法令検索"), `${f} に出典の名称が無い`).toBe(true);
+      expect(html.includes("加工"), `${f} に加工した旨の記載が無い`).toBe(true);
+      expect(
+        html.includes("国が作成したものではありません"),
+        `${f} に「国が作成したものではない」旨が無い`,
+      ).toBe(true);
     }
   });
 });
