@@ -40,10 +40,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="https://github.com/twill3c/tenkyo-lab/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>{" "}
             © 2026 坂田哲朗
           </span>
-          <a href="https://github.com/twill3c/tenkyo-lab" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://claude.ai/code/artifact/f7cc1a9c-1236-4425-b9f6-b99087f6a7fc" target="_blank" rel="noopener">典拠ラボの歩き方</a>
-          <a href="https://claude.ai/code/artifact/7295b03e-9c89-4faf-9780-011515639650" target="_blank" rel="noopener">典拠ラボの設計図</a>
-          <a href="https://app-menu-amber.vercel.app/" target="_blank" rel="noopener">App Menu</a>
+          <span className="fsep">・</span><a href="https://github.com/twill3c/tenkyo-lab" target="_blank" rel="noopener">GitHub</a>
+          <span className="fsep">・</span><a href="https://claude.ai/code/artifact/f7cc1a9c-1236-4425-b9f6-b99087f6a7fc" target="_blank" rel="noopener">典拠ラボの歩き方</a>
+          <span className="fsep">・</span><a href="https://claude.ai/code/artifact/7295b03e-9c89-4faf-9780-011515639650" target="_blank" rel="noopener">典拠ラボの設計図</a>
+          <span className="fsep">・</span><a href="https://app-menu-amber.vercel.app/" target="_blank" rel="noopener">App Menu</a>
         </footer>
       </body>
     </html>
