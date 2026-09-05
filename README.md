@@ -117,4 +117,6 @@ npm test && npm run test:py && npm run typecheck
 コードは MIT(`LICENSE`)。`public/tenkyo/index/` と `public/tenkyo/eval/` に含まれる
 法令由来のデータは上記の出典・利用条件に従う。
 `public/tenkyo/model/` は [Xenova/multilingual-e5-small](https://huggingface.co/Xenova/multilingual-e5-small)
-の語彙を刈ったもので、元の模型のライセンスに従う。
+(base_model は [intfloat/multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small)・
+**MIT**)の語彙を刈ったもの。原本に LICENSE ファイルも著作権者表示も無いため、
+出所・取得経路・加工内容の明記をもって MIT の表示に代える。詳細は [NOTICE](NOTICE)。

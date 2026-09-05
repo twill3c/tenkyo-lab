@@ -1,0 +1,49 @@
+NOTICE — tenkyo-lab(典拠ラボ)
+
+このアプリは、閲覧者の端末の中だけで検索を動かすために、**第三者の埋め込み模型と
+法令データ**を配布物に含みます。
+
+--------------------------------------------------------------------
+埋め込み模型
+--------------------------------------------------------------------
+
+  同梱先: public/tenkyo/model/
+          config.json / tokenizer.json / tokenizer_config.json /
+          onnx/model_quantized.onnx
+  原本:   https://huggingface.co/Xenova/multilingual-e5-small
+          (ONNX 変換版。base_model は intfloat/multilingual-e5-small)
+  取得:   scripts/fetch-model.mjs(HuggingFace resolve/main から取得)
+  加工:   語彙を刈っている(内訳は public/tenkyo/model/prune.json)
+
+  ライセンス: **MIT**
+    intfloat/multilingual-e5-small のモデルカードは `license: mit` を宣言している
+    (2026-09-02 確認)。Xenova の ONNX 版はモデルカードに license 欄を持たないが、
+    base_model を intfloat/multilingual-e5-small と明記しており、重みはその派生である。
+
+  **原本に LICENSE ファイルは無く、著作権者名の表示も置かれていない**
+  (https://huggingface.co/intfloat/multilingual-e5-small/raw/main/LICENSE は 404)。
+  MIT が求める著作権表示を転記しようにも原本に無いため、
+  取得元 URL・base_model・取得経路(fetch-model.mjs)・加工内容(prune.json)を
+  明記することをもって表示に代える。再配布する場合はこの NOTICE ごと引き継ぐこと。
+
+  姉妹プロジェクト kototoi-do も同じ模型を同梱しており、扱いを揃えてある。
+
+--------------------------------------------------------------------
+法令データ
+--------------------------------------------------------------------
+
+  同梱先: public/tenkyo/index/ ・ public/tenkyo/eval/
+  出典:   「e-Gov 法令検索」(デジタル庁)https://laws.e-gov.go.jp/
+  条件:   公共データ利用規約(第 1.0 版)
+
+  上記コンテンツを条・項の単位に分割し、検索用の索引を作成する加工を行っている。
+  **加工は本リポジトリの作成者によるものであり、国が作成したものではない。**
+  取得の記録は data/PROVENANCE.md にある。
+
+  本サイトは検索技術の実験台であり、掲載する条文は法的助言ではない。
+
+--------------------------------------------------------------------
+本アプリ自身のコード
+--------------------------------------------------------------------
+
+LICENSE を参照(MIT)。索引・検索・評価・較正はすべて自作。
